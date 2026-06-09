@@ -424,15 +424,15 @@ function drawLoop(t){
       const hintPulse = isHinting ? (Math.sin(t*0.005)+1)/2 : (Math.sin(t*0.003)+1)/2;
 
       // Hint ring
-      ctx.globalAlpha=0.12+hintPulse*0.12;
-      ctx.strokeStyle='#c9a96e'; ctx.lineWidth=1; ctx.setLineDash([3,4]);
-      ctx.beginPath(); ctx.arc(s.x,s.y,s.r*(5+hintPulse*3),0,Math.PI*2); ctx.stroke();
+      ctx.globalAlpha=0.05+hintPulse*0.05;
+      ctx.strokeStyle='#c9a96e'; ctx.lineWidth=0.6; ctx.setLineDash([2,6]);
+      ctx.beginPath(); ctx.arc(s.x,s.y,s.r*(4+hintPulse*2),0,Math.PI*2); ctx.stroke();
       ctx.setLineDash([]);
 
       // Star itself
-      ctx.globalAlpha = isHinting ? 0.6+hintPulse*0.4 : 0.35+pulse*0.2;
-      ctx.fillStyle = isHinting ? '#f0dfa8' : '#ffffff';
-      ctx.beginPath(); ctx.arc(s.x,s.y,s.r*(isHinting?1.1:0.85),0,Math.PI*2); ctx.fill();
+      ctx.globalAlpha = isHinting ? 0.45+hintPulse*0.2 : 0.30+pulse*0.15;
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath(); ctx.arc(s.x,s.y,s.r*0.9,0,Math.PI*2); ctx.fill();
 
     } else {
       // Unlit, not next
@@ -541,6 +541,7 @@ function spawnHearts(){
 }
 
 function restartAll(){
+  // Reset message
   const msg=document.getElementById('message');
   msg.classList.remove('visible');
   ['deco','msg1','msg2','msg2b','msgName'].forEach(id=>{
@@ -553,22 +554,21 @@ function restartAll(){
   document.getElementById('btnRestart').classList.remove('show');
   document.getElementById('nebula').classList.remove('visible');
 
-  const ps=document.getElementById('poster-screen');
-  ps.style.transition='none'; ps.style.opacity='0'; ps.classList.remove('visible');
-  document.getElementById('star-hint').style.opacity='';
-  document.getElementById('progress').style.opacity='';
-
-  const ls=document.getElementById('lock-screen');
-  ls.classList.remove('fade-out'); ls.style.opacity='1'; ls.style.transform='none';
-  document.getElementById('lockWrap').classList.remove('unlocking');
-  document.getElementById('inp-day').value='';
-  document.getElementById('inp-month').value='';
-  document.getElementById('inp-year').value='';
-
+  // Reset constellation state
   nextIdx=0; completed=false;
   cancelAnimationFrame(raf2);
-  if(stars.length) stars.forEach(s=>s.lit=false);
+  if(stars.length) stars.forEach(s=>{ s.lit=false; s.litTime=0; });
   document.querySelectorAll('.pheart').forEach(d=>{ d.classList.remove('lit'); d.textContent='♡'; });
+
+  // Restore poster to full opacity and restart constellation
+  const ps=document.getElementById('poster-screen');
+  ps.style.transition='opacity 1s ease';
+  ps.style.opacity='1';
+  document.getElementById('star-hint').style.opacity='1';
+  document.getElementById('progress').style.opacity='1';
+
+  initConstellation();
+  drawLoop(performance.now());
 }
 </script>
 </body>
