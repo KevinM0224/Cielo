@@ -235,7 +235,7 @@ function tryUnlock(){
   const m=parseInt(document.getElementById('inp-month').value);
   const y=parseInt(document.getElementById('inp-year').value);
   const err=document.getElementById('errMsg');
-  if(d===2&&m===9&&y===2004){ err.classList.remove('show'); doUnlock(); }
+  if(d===25&&m===8&&y===2010){ err.classList.remove('show'); doUnlock(); }
   else {
     err.classList.add('show');
     playNote(200, 0.4, 0.1, 'sawtooth');
